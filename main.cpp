@@ -4,7 +4,7 @@
 #include "SimplexMetodMin.h"
 
 int main() {
-    int n, m;
+    int m, n;
     bool type;
     std::cin >> n >> m >> type;
     if (type == 0) {
