@@ -151,6 +151,7 @@ void SimplexMetodMin::Print() {
 }
 
 SimplexMetodMin::SimplexMetodMin(int n, int m, bool type): AbstractSimplexMetod(n, m, type) {
+
     int tmp = 0;
     for (int i = 0; i < n; i++) {
         std::cin >> coefficient_func_[i];

@@ -11,7 +11,7 @@ public:
     int count_coefficient_func_;
     int count_limit_;
     int size_;
-    std::vector<std::vector<int> > A_;
+    std::vector<std::vector<double> > A_;
     std::vector<int> b_;
     std::vector<int> coefficient_func_;
     std::vector<std::vector<double> > solve_vector_;
@@ -24,7 +24,7 @@ public:
       , count_coefficient_func_(n)
       , count_limit_(m)
       , coefficient_func_(size_, 0)
-      , A_(m, std::vector<int>(n))
+      , A_(m, std::vector<double>(n))
       , b_(m, 0)
       , solve_vector_(m, std::vector<double>(m + m + n + 1, 0))
       , simplex_delta_(m + m + n + 1, std::pair<int, int>(0, 0))

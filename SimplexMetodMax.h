@@ -7,8 +7,7 @@
 #include "AbstractSimplexMetod.h"
 class SimplexMetodMax : public AbstractSimplexMetod {
 public:
-    SimplexMetodMax(int n, int m, bool type) : AbstractSimplexMetod(n, m, type) {
-    }
+    SimplexMetodMax(int n, int m, bool type);
 
     void CalculateSimplexDelta(int idx_str, int idx_column) override;
 
