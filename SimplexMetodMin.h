@@ -25,6 +25,11 @@ public:
 
     void TransformationMatrix(int idx_column, int idx_str) override;
 
+    double Round(double x) override;
+
     void FindSolve() override;
+
+    std::vector<std::vector<double>> RoundArray(std::vector<std::vector<double>> &vector) override;
+
 };
 #endif //SIMPLEXMETODMIN_H

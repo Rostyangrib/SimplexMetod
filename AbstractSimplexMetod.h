@@ -5,21 +5,26 @@
 #ifndef ABSTRACTSIMPLEXMETOD_H
 #define ABSTRACTSIMPLEXMETOD_H
 #include <vector>
+
 class AbstractSimplexMetod {
 public:
+    virtual ~AbstractSimplexMetod() = default;
+
+    double delta_;
     bool type_;
     int count_coefficient_func_;
     int count_limit_;
     int size_;
     std::vector<std::vector<double> > A_;
     std::vector<int> b_;
-    std::vector<int> coefficient_func_;
+    std::vector<double> coefficient_func_;
     std::vector<std::vector<double> > solve_vector_;
     std::vector<std::pair<double, double> > simplex_delta_;
     std::vector<double> min_vector_;
     std::vector<int> cur_base_;
 
     AbstractSimplexMetod(int n, int m, bool type) : size_(n + m + m + 1)
+      , delta_(1e-3)
       , type_(type)
       , count_coefficient_func_(n)
       , count_limit_(m)
@@ -45,5 +50,9 @@ public:
     virtual void Print() = 0;
 
     virtual void PrintAnswer() = 0;
+
+    virtual double Round(double x) = 0;
+
+    virtual std::vector<std::vector<double>> RoundArray(std::vector<std::vector<double>> &vector) = 0;
 };
 #endif //ABSTRACTSIMPLEXMETOD_H

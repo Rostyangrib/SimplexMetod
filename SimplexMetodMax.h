@@ -24,6 +24,10 @@ public:
     void FindSolve() override;
 
     void CreateTableMin() override;
+
+    double Round(double x) override;
+
+    std::vector<std::vector<double>> RoundArray(std::vector<std::vector<double>> &vector) override;
 };
 
 #endif //SIMPLEXMETODMAX_H

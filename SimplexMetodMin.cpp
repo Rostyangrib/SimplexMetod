@@ -4,13 +4,28 @@
 
 #include <iostream>
 #include "SimplexMetodMin.h"
+
+#include <cmath>
 // find min with M metod
+double SimplexMetodMin::Round(double x) {
+    double delta = 1e-3;
+    round(x * pow(10, 2)) / pow(10, 2);
+
+    if (x > 0 && x <= delta || x < 0 && x >= -delta) {
+        x = 0;
+    }
+    return x;
+}
+
 void SimplexMetodMin::FindSolve() {
     CreateTableMin();
     Print();
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; ; i++) {
         min_vector_.clear();
         int idx_column = FindMinSimplex();
+        if (idx_column == -1) {
+            break;
+        }
         int idx_str = CalculateMin(idx_column);
         TransformationMatrix(idx_column, idx_str);
         CalculateSimplexDelta(idx_str, idx_column);
@@ -19,11 +34,20 @@ void SimplexMetodMin::FindSolve() {
     PrintAnswer();
 }
 
+std::vector<std::vector<double>> SimplexMetodMin::RoundArray(std::vector<std::vector<double>> &vector) {
+    // Round matrix
+    for (const auto& i : vector) {
+        for (auto j : i) {
+            Round(j);
+        }
+    }
+    return vector;
+}
 
 void SimplexMetodMin::TransformationMatrix(int idx_column, int idx_str) {
     double coefficient = solve_vector_[idx_str][idx_column];
     for (int i = 0; i < size_; i++) {
-        solve_vector_[idx_str][i] /= coefficient;
+        solve_vector_[idx_str][i] =  Round(solve_vector_[idx_str][i] / coefficient);
     }
     for (int i = 0; i < count_limit_; i++) {
         double coefficient_1 = solve_vector_[i][idx_column];
@@ -31,18 +55,19 @@ void SimplexMetodMin::TransformationMatrix(int idx_column, int idx_str) {
             if (i == idx_str) {
                 break;
             }
-            solve_vector_[i][j] -= solve_vector_[idx_str][j] * coefficient_1;
+            solve_vector_[i][j] = Round(solve_vector_[i][j] - solve_vector_[idx_str][j] * coefficient_1);
         }
     }
 }
+
 
 
 void SimplexMetodMin::CalculateSimplexDelta(int idx_str, int idx_column) {
     double coefficient_1 = simplex_delta_[idx_column].first;
     double coefficient_2 = simplex_delta_[idx_column].second;
     for (int i = 0; i < size_; i++) {
-        simplex_delta_[i].first -= solve_vector_[idx_str][i] * coefficient_1;
-        simplex_delta_[i].second -= solve_vector_[idx_str][i] * coefficient_2;
+        simplex_delta_[i].first = Round(simplex_delta_[i].first - solve_vector_[idx_str][i] * coefficient_1);
+        simplex_delta_[i].second = Round(simplex_delta_[i].second - solve_vector_[idx_str][i] * coefficient_2);
     }
 }
 
@@ -50,8 +75,8 @@ int SimplexMetodMin::CalculateMin(int idx) {
     double min = 10000000;
     int str_idx = 0;
     for (int i = 0; i < cur_base_.size(); i++) {
-        if (solve_vector_[i][idx] > 0 && solve_vector_[i][size_ - 1] / solve_vector_[i][idx] < min) {
-            min = solve_vector_[i][size_ - 1] / solve_vector_[i][idx];
+        if (solve_vector_[i][idx] > 0 && Round(solve_vector_[i][size_ - 1] / solve_vector_[i][idx]) < min) {
+            min = Round(solve_vector_[i][size_ - 1] / solve_vector_[i][idx]);
             min_vector_.push_back(min);
             str_idx = i;
         }
@@ -120,10 +145,15 @@ void SimplexMetodMin::PrintAnswer() {
         }
     }
     std::cout << std::endl << "Basic solution" << std::endl;
-    for (int i = 0; i < cur_base_.size(); i++) {
-        for (int j = 0; j < count_limit_; j++) {
-            if (solve_vector_[j][cur_base_[i]] == 1) {
-                std::cout << "x" << j + 1 << " = " << solve_vector_[j][size_ - 1] << std::endl;
+
+    for (int i = 0; i < count_limit_; i++) {
+        for (int j = 0; j < size_; j++) {
+            if (solve_vector_[i][j] == 1) {
+                if (j + 1 > count_limit_) {
+                    std::cout << "x" << cur_base_[i] - 1 << " = " << 0 << std::endl;
+                    break;
+                }
+                std::cout << "x" << cur_base_[i] - 1 << " = " << solve_vector_[i][size_ - 1] << std::endl;
             }
         }
     }
@@ -138,10 +168,7 @@ void SimplexMetodMin::Print() {
         }
         std::cout << std::endl;
     }
-    std::cout << "min ";
-    for (int i = 0; !min_vector_.empty() && i < count_limit_; i++) {
-        std::cout << min_vector_[i] << " ";
-    }
+
     std::cout << std::endl;
     std::cout << std::endl << "Simplex delta:" << std::endl;
     for (int i = 0; i < size_; i++) {
