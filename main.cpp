@@ -10,8 +10,7 @@ int main() {
     std::cin >> n >> m;
     std::cout << "Enter type your task: 1->max, 0->min\n";
     std::cin >> type;
-    std::cout <<
-            "Enter coefficients your target function and matrix limits in format: ctf-> 1 0 4000 - the first limit ->(next line) 0 1 6000-> (next line) 1 0.66 6000->enter \n";
+    std::cout << "Enter your coefficients target function and matrix limits in format: ctf-> 1 0 4000 - the first limit ->(next line) 0 1 6000-> (next line) 1 0.66 6000->enter \n";
     if (type == 0) {
         SimplexMetodMin simplex(n, m, type);
         simplex.FindSolve();
