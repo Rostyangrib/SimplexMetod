@@ -4,7 +4,13 @@
 
 #include <iostream>
 #include "SimplexMetodMin.h"
+
+#include <cmath>
 // find min with M metod
+double Round(double x) {
+    return round(x * pow(10, 2)) / pow(10, 2);
+}
+
 void SimplexMetodMin::FindSolve() {
     CreateTableMin();
     Print();
@@ -23,7 +29,7 @@ void SimplexMetodMin::FindSolve() {
 void SimplexMetodMin::TransformationMatrix(int idx_column, int idx_str) {
     double coefficient = solve_vector_[idx_str][idx_column];
     for (int i = 0; i < size_; i++) {
-        solve_vector_[idx_str][i] /= coefficient;
+        solve_vector_[idx_str][i] =  Round(solve_vector_[idx_str][i] / coefficient);
     }
     for (int i = 0; i < count_limit_; i++) {
         double coefficient_1 = solve_vector_[i][idx_column];
@@ -31,18 +37,19 @@ void SimplexMetodMin::TransformationMatrix(int idx_column, int idx_str) {
             if (i == idx_str) {
                 break;
             }
-            solve_vector_[i][j] -= solve_vector_[idx_str][j] * coefficient_1;
+            solve_vector_[i][j] = Round(solve_vector_[i][j] - solve_vector_[idx_str][j] * coefficient_1);
         }
     }
 }
+
 
 
 void SimplexMetodMin::CalculateSimplexDelta(int idx_str, int idx_column) {
     double coefficient_1 = simplex_delta_[idx_column].first;
     double coefficient_2 = simplex_delta_[idx_column].second;
     for (int i = 0; i < size_; i++) {
-        simplex_delta_[i].first -= solve_vector_[idx_str][i] * coefficient_1;
-        simplex_delta_[i].second -= solve_vector_[idx_str][i] * coefficient_2;
+        simplex_delta_[i].first -= Round(solve_vector_[idx_str][i] * coefficient_1);
+        simplex_delta_[i].second -= Round(solve_vector_[idx_str][i] * coefficient_2);
     }
 }
 
@@ -50,8 +57,8 @@ int SimplexMetodMin::CalculateMin(int idx) {
     double min = 10000000;
     int str_idx = 0;
     for (int i = 0; i < cur_base_.size(); i++) {
-        if (solve_vector_[i][idx] > 0 && solve_vector_[i][size_ - 1] / solve_vector_[i][idx] < min) {
-            min = solve_vector_[i][size_ - 1] / solve_vector_[i][idx];
+        if (solve_vector_[i][idx] > 0 && Round(solve_vector_[i][size_ - 1] / solve_vector_[i][idx]) < min) {
+            min = Round(solve_vector_[i][size_ - 1] / solve_vector_[i][idx]);
             min_vector_.push_back(min);
             str_idx = i;
         }
