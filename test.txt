@@ -10,18 +10,23 @@ tests
 2) Kic task
 3 2
 0
-170 370 400
-3 2 4 40
-2 6 5 30
+170 370  400
+3 2 4 >= 40
+2 6 5 >= 30
+Basic solution
+x1 = 12.85
+x2 = 0.72
+x3 = 0
+Target function value = 2450
 
 3) Task max
 2 3
 1
 4 3
-1 0 4000
-0 1 6000
-1 0.66 6000
-
+1 0  4000
+0 1  6000
+1 0.66  6000
+<= <= <=
 4) sob
 3 3
 1
@@ -68,3 +73,23 @@ tests
 1 0 3 20
 4 5 7 15
 1 2 0 40
+
+#include <gtest/gtest.h>
+#include "SimplexMetodMin.h"
+#include "SimplexMetodMax.h"
+#include "AbstractSimplexMetod.h"
+
+
+TEST(SimplexMetodMinTest, RoundFunction) {
+    //SimplexMetodMin simplex(2, 3, false);
+   // EXPECT_DOUBLE_EQ(simplex.Round(2.345, 1e-3), 2.35);
+    //EXPECT_DOUBLE_EQ(simplex.Round(2.344, 1e-3), 2.34);
+}
+down task
+2 3
+1
+2 3
+1 2 18
+2 1 21
+1 1 22
+

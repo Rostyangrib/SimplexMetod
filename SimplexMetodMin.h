@@ -5,11 +5,11 @@
 #ifndef SIMPLEXMETODMIN_H
 #define SIMPLEXMETODMIN_H
 #include "AbstractSimplexMetod.h"
+
 class SimplexMetodMin : public AbstractSimplexMetod {
 public:
-
-
-    SimplexMetodMin(int n, int m, bool type);
+    SimplexMetodMin(int n, int m, bool type, const std::vector<double>& coefficient_func,
+                    const std::vector<std::vector<double> >& solve_vector, const std::vector<double>& cur_base);
 
     void CreateTableMin() override;
 
@@ -25,11 +25,10 @@ public:
 
     void TransformationMatrix(int idx_column, int idx_str) override;
 
-    double Round(double x) override;
+    double Round(double x, double delta) override;
 
-    void FindSolve() override;
+    double FindSolve() override;
 
-    std::vector<std::vector<double>> RoundArray(std::vector<std::vector<double>> &vector) override;
-
+    std::vector<std::vector<double> > RoundArray(std::vector<std::vector<double> > &vector) override;
 };
 #endif //SIMPLEXMETODMIN_H
